@@ -1,0 +1,198 @@
+# Переменные окружения для JWT токенов
+@user_token =
+@admin_token =
+
+# Скопируйте новый токен из ответа авторизации и обновите значение переменной выше
+
+
+### 1. ПУБЛИЧНЫЕ ЭНДПОИНТЫ (не требуют JWT) ###
+
+### Регистрация нового пользователя
+POST http://127.0.0.1:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "password": "password123"
+}
+
+
+### Авторизация (получение JWT токена)
+POST http://127.0.0.1:8080/api/jwt/auth
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "password": "password123"
+}
+
+
+### 2. УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЕМ ###
+
+### Проверка статуса аутентификации
+GET http://127.0.0.1:8080/api/auth/status
+Authorization: Bearer {{user_token}}
+
+
+### Получение профиля пользователя
+GET http://127.0.0.1:8080/api/auth/profile
+Authorization: Bearer {{user_token}}
+
+
+### Смена пароля пользователя
+POST http://127.0.0.1:8080/api/auth/change-password
+Authorization: Bearer {{user_token}}
+Content-Type: application/json
+
+{
+  "currentPassword": "password123",
+  "newPassword": "newPassword456"
+}
+
+
+### 3. OTP ОПЕРАЦИИ ###
+
+### Отправка OTP на email
+POST http://127.0.0.1:8080/api/otp/send-email
+Authorization: Bearer {{user_token}}
+Content-Type: application/json
+
+{
+  "email": "hardminesu@gmail.com"
+}
+
+
+### Отправка OTP через SMS
+POST http://127.0.0.1:8080/api/otp/send-sms
+Authorization: Bearer {{user_token}}
+Content-Type: application/json
+
+{
+  "phone": "+79001234567"
+}
+
+
+### Верификация OTP кода текущего пользователя
+POST http://127.0.0.1:8080/api/otp/verify
+Authorization: Bearer {{user_token}}
+Content-Type: application/json
+
+{
+  "code": "137523"
+}
+
+
+### Валидация OTP кода для указанного пользователя
+POST http://127.0.0.1:8080/api/otp/validate
+Authorization: Bearer {{user_token}}
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "code": "123456"
+}
+
+
+### 4. ЭКСПОРТ OTP КОДОВ В CSV ###
+
+### Экспорт истории OTP пользователя в CSV
+GET http://127.0.0.1:8080/api/otp/export/csv
+Authorization: Bearer {{user_token}}
+
+### Экспорт истории OTP всех пользователей (только для админа)
+GET http://127.0.0.1:8080/api/otp/export/admin/csv
+Authorization: Bearer {{admin_token}}
+
+### Экспорт истории OTP конкретного пользователя (только для админа)
+GET http://127.0.0.1:8080/api/otp/export/admin/csv/newuser
+Authorization: Bearer {{admin_token}}
+
+
+
+
+
+
+
+### 5. TELEGRAM ИНТЕГРАЦИЯ ###
+
+### Генерация токена для связывания с Telegram
+GET http://127.0.0.1:8080/api/telegram/generate-link-token
+Authorization: Bearer {{user_token}}
+
+
+### Проверка статуса связи с Telegram
+GET http://127.0.0.1:8080/api/telegram/status
+Authorization: Bearer {{user_token}}
+
+
+### Отправка OTP через Telegram
+POST http://127.0.0.1:8080/api/telegram/send-otp
+Authorization: Bearer {{user_token}}
+
+
+### Верификация и связывание аккаунта с Telegram
+POST http://127.0.0.1:8080/api/telegram/verify-link
+Authorization: Bearer {{user_token}}
+Content-Type: application/json
+
+{
+  "code": "link_token_123"
+}
+
+
+### 6. АДМИНИСТРАТИВНЫЕ ФУНКЦИИ (требуют роль ADMIN) ###
+
+### Регистрация пользователя-администратора
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123123"
+}
+
+
+### Получение списка пользователей (только для админа)
+GET http://127.0.0.1:8080/api/admin/users
+Authorization: Bearer {{admin_token}}
+
+
+### Получение конфигурации OTP (только для админа)
+GET http://127.0.0.1:8080/api/admin/otp-config
+Authorization: Bearer {{admin_token}}
+
+
+### Обновление конфигурации OTP (только для админа)
+PUT http://127.0.0.1:8080/api/admin/otp-config
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "codeLength": 6,
+  "lifetimeMinutes": 15
+}
+
+
+### Удаление пользователя (только для админа)
+DELETE http://127.0.0.1:8080/api/admin/users/1
+Authorization: Bearer {{admin_token}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
