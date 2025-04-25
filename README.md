@@ -138,7 +138,7 @@ GRANT ALL PRIVILEGES ON DATABASE otp_db TO postgres;
 1. Клонируйте репозиторий:
 
 ```bash
-git clone https://github.com/yourusername/otp-service.git
+git clone https://github.com/n1str/otpgen.git
 cd otp-service
 ```
 
@@ -189,6 +189,8 @@ startsmppsim.bat
 ```
 
 ### 4. Запуск приложения
+
+Запустите приложение otpgen
 
 Сервис будет доступен по адресу: `http://localhost:8080`
 
